@@ -9,8 +9,11 @@ var FSHADER_SOURCE =
   'void main(){\n' + ' gl_FragColor = vec4(0.0, 0.2, 0.9, 1.0);\n' + '}\n';
 
 function main() {
-  var canvas = document.getElementById('webgl');
-  var gl = getWebGLContext(canvas);
+  const canvas = document.createElement('canvas');
+  canvas.width = 400;
+  canvas.height = 400;
+  document.querySelector('body').appendChild(canvas);
+  var gl = canvas.getContext('webgl');
 
   if (!gl) {
     console.log('Failed to get the WebGL context');
