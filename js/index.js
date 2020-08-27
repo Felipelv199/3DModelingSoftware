@@ -77,7 +77,7 @@ function initVertexBuffers(gl, vertices, colors) {
   gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
   var viewMatrix = new Matrix4();
-  viewMatrix.setLookAt(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  viewMatrix.setLookAt(0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
   var u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get location of u_ViewMatrix');
@@ -124,10 +124,10 @@ function draw(gl) {
   }
 }
 
-var index = 0;
 var angle = 0.0;
-var g_points = [];
-var g_colors = [];
+var g_points = [[0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0]];
+var index = g_points.length;
+var g_colors = [[1, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1, 1, 0.5, 1]];
 function click(ev, gl, canvas) {
   if (event.buttons == 1) {
     var x = ev.clientX;
@@ -136,7 +136,6 @@ function click(ev, gl, canvas) {
 
     x = (x - rect.left - canvas.width / 2) / (canvas.width / 2);
     y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
-
     if (g_points.length <= index) {
       var arrayPoints = [];
       g_points.push(arrayPoints);
@@ -146,13 +145,7 @@ function click(ev, gl, canvas) {
 
     g_points[index].push(x);
     g_points[index].push(y);
-    var z = 0.0;
-    if (ev.ctrlKey) {
-      z = -0.5;
-    } else if (ev.shiftKey) {
-      z = -1.0;
-    }
-    g_points[index].push(z);
+    g_points[index].push(0.0);
 
     g_colors[index].push(Math.random());
     g_colors[index].push(Math.random());
