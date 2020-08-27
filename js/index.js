@@ -22,8 +22,15 @@ function main() {
   canvas.width = 400;
   canvas.height = 400;
   document.querySelector('body').appendChild(canvas);
-
+  const div = document.createElement('div');
+  div.id = 'modelsAngle';
+  document.querySelector('body').appendChild(div);
   const gl = canvas.getContext('webgl');
+
+  for (let angleIndex in g_angles) {
+    createInputAngleFigure(gl, angleIndex);
+  }
+
   if (!gl) {
     console.log('Failed to get the WebGL context');
     return;
@@ -41,6 +48,13 @@ function main() {
     rightClick(ev, gl);
     return false;
   };
+  div.addEventListener('change', (e) => {
+    e.preventDefault();
+    const modelId = e.target.parentElement.id;
+    const angleOrient = e.target.name;
+    g_angles[modelId][angleOrient] = e.target.value;
+    draw(gl);
+  });
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
@@ -116,7 +130,6 @@ function initVertexBuffers(gl, vertices, colors, n_model) {
 function draw(gl) {
   gl.clear(gl.COLOR_BUFFER_BIT);
   for (var i = 0; i < g_points.length; i++) {
-    handleAngleChange(i);
     var n = initVertexBuffers(
       gl,
       new Float32Array(g_points[i]),
@@ -127,10 +140,10 @@ function draw(gl) {
   }
 }
 
-var g_points = [];
+/* var g_points = [];
 var g_colors = [];
-var g_angles = [];
-/* var g_points = [
+var g_angles = []; */
+var g_points = [
   [0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0],
   [1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0],
 ];
@@ -141,7 +154,7 @@ var g_colors = [
 var g_angles = [
   [0, 0, 0],
   [0, 0, 0],
-]; */
+];
 var index = g_points.length;
 function click(ev, gl, canvas) {
   if (event.buttons == 1) {
@@ -159,8 +172,9 @@ function click(ev, gl, canvas) {
     }
     if (!g_angles[index]) {
       const angle = [0, 0, 0];
-      createInputAngleFigure(gl);
       g_angles.push(angle);
+
+      createInputAngleFigure(gl, index);
     }
 
     g_points[index].push(x);
@@ -175,9 +189,11 @@ function click(ev, gl, canvas) {
   }
 }
 
-function createInputAngleFigure(gl) {
+function createInputAngleFigure(gl, i) {
+  const modelsAnglesDiv = document.getElementById('modelsAngle');
+  cos;
   const div = document.createElement('div');
-  div.id = index;
+  div.id = i;
   const labelX = document.createElement('label');
   labelX.innerHTML = 'X';
   const inputAngleX = document.createElement('input');
@@ -213,14 +229,5 @@ function createInputAngleFigure(gl) {
   inputAngleZ.min = '-360';
   div.appendChild(labelZ);
   div.appendChild(inputAngleZ);
-
-  document.querySelector('body').appendChild(div);
-}
-
-function handleAngleChange(index) {
-  const div = document.getElementById(`${index}`);
-  div.addEventListener('change', (e) => {
-    e.preventDefault();
-    g_angles[index][e.target.name] = Number(e.target.value);
-  });
+  modelsAnglesDiv.appendChild(div);
 }
