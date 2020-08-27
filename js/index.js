@@ -17,13 +17,13 @@ var FSHADER_SOURCE =
   ' gl_FragColor = u_FragColor;\n' +
   '}\n';
 
-const canvas = document.createElement('canvas');
-canvas.width = 400;
-canvas.height = 400;
-document.querySelector('body').appendChild(canvas);
-const gl = canvas.getContext('webgl');
-
 function main() {
+  const canvas = document.createElement('canvas');
+  canvas.width = 400;
+  canvas.height = 400;
+  document.querySelector('body').appendChild(canvas);
+
+  const gl = canvas.getContext('webgl');
   if (!gl) {
     console.log('Failed to get the WebGL context');
     return;
@@ -42,14 +42,67 @@ function main() {
     return false;
   };
 
+  const labelX = document.createElement('label');
+  labelX.innerHTML = 'X';
+  const inputAngleX = document.createElement('input');
+  inputAngleX.type = 'number';
+  inputAngleX.value = '0';
+  inputAngleX.max = '360';
+  inputAngleX.min = '-360';
+  document.querySelector('body').appendChild(labelX);
+  document.querySelector('body').appendChild(inputAngleX);
+
+  const labelY = document.createElement('label');
+  labelY.innerHTML = 'Y';
+  const inputAngleY = document.createElement('input');
+  inputAngleY.type = 'number';
+  inputAngleY.value = '0';
+  inputAngleY.max = '360';
+  inputAngleY.min = '-360';
+  document.querySelector('body').appendChild(labelY);
+  document.querySelector('body').appendChild(inputAngleY);
+
+  const labelZ = document.createElement('label');
+  labelZ.innerHTML = 'Z';
+  const inputAngleZ = document.createElement('input');
+  inputAngleZ.type = 'number';
+  inputAngleZ.value = '0';
+  inputAngleZ.max = '360';
+  inputAngleZ.min = '-360';
+  document.querySelector('body').appendChild(labelZ);
+  document.querySelector('body').appendChild(inputAngleZ);
+
+  inputAngleX.addEventListener('change', (e) => {
+    e.preventDefault();
+    angleX = e.target.value;
+    draw(gl);
+  });
+
+  inputAngleY.addEventListener('change', (e) => {
+    e.preventDefault();
+    angleY = e.target.value;
+    draw(gl);
+  });
+
+  inputAngleZ.addEventListener('change', (e) => {
+    e.preventDefault();
+    angleZ = e.target.value;
+    draw(gl);
+  });
+
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
   draw(gl);
 }
 
 function rightClick(ev, gl) {
-  index++;
-  angle += 10.0;
+  console.log(g_points);
+  if (g_points[index]) {
+    if (g_points[index] === 0) {
+      index++;
+    }
+  }
+  angleX += 10.0;
   draw(gl);
 }
 
@@ -68,7 +121,9 @@ function initVertexBuffers(gl, vertices, colors) {
   gl.enableVertexAttribArray(a_Position);
 
   var modelMatrix = new Matrix4();
-  modelMatrix.rotate(angle, 0, 0, 1);
+  modelMatrix.rotate(angleX, 1, 0, 0);
+  modelMatrix.rotate(angleY, 0, 1, 0);
+  modelMatrix.rotate(angleZ, 0, 0, 1);
   var u_ModelMatrix = gl.getUniformLocation(gl.program, 'u_ModelMatrix');
   if (!u_ModelMatrix) {
     console.log('Failed to get location of u_ModelMatrix');
@@ -120,11 +175,12 @@ function draw(gl) {
       new Float32Array(g_points[i]),
       new Float32Array(g_colors[i])
     );
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, n);
+    gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
   }
 }
-
-var angle = 0.0;
+var angleX = 0.0;
+var angleY = 0.0;
+var angleZ = 0.0;
 var g_points = [[0, 0, 0, 0, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0]];
 var index = g_points.length;
 var g_colors = [[1, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1, 0, 0.5, 1, 1, 0.5, 1]];
