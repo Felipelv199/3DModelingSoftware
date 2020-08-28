@@ -92,7 +92,7 @@ function initVertexBuffers(gl, vertices, colors, n_model) {
   gl.uniformMatrix4fv(u_ModelMatrix, false, modelMatrix.elements);
 
   var viewMatrix = new Matrix4();
-  viewMatrix.setLookAt(0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+  viewMatrix.setLookAt(0.0, 0.0, 1.5, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
   var u_ViewMatrix = gl.getUniformLocation(gl.program, 'u_ViewMatrix');
   if (!u_ViewMatrix) {
     console.log('Failed to get location of u_ViewMatrix');
@@ -101,7 +101,8 @@ function initVertexBuffers(gl, vertices, colors, n_model) {
   gl.uniformMatrix4fv(u_ViewMatrix, false, viewMatrix.elements);
 
   var projMatrix = new Matrix4();
-  projMatrix.setPerspective(120.0, 0.5, 0.1, 5.0);
+  //projMatrix.setOrtho(-1.0, 1.0, -1.0, 1.0, 1.0, 2.0);
+  projMatrix.setPerspective(60.0, 1.0, 0.1, 5.0);
   var u_ProjMatrix = gl.getUniformLocation(gl.program, 'u_ProjMatrix');
   if (!u_ProjMatrix) {
     console.log('Failed to get location of u_ProjMatrix');
@@ -191,7 +192,6 @@ function click(ev, gl, canvas) {
 
 function createInputAngleFigure(gl, i) {
   const modelsAnglesDiv = document.getElementById('modelsAngle');
-  cos;
   const div = document.createElement('div');
   div.id = i;
   const labelX = document.createElement('label');
@@ -199,7 +199,7 @@ function createInputAngleFigure(gl, i) {
   const inputAngleX = document.createElement('input');
   inputAngleX.id = 'x';
   inputAngleX.name = '0';
-  inputAngleX.type = 'number';
+  inputAngleX.type = 'range';
   inputAngleX.value = '0';
   inputAngleX.max = '360';
   inputAngleX.min = '-360';
@@ -211,7 +211,7 @@ function createInputAngleFigure(gl, i) {
   const inputAngleY = document.createElement('input');
   inputAngleY.id = 'y';
   inputAngleY.name = '1';
-  inputAngleY.type = 'number';
+  inputAngleY.type = 'range';
   inputAngleY.value = '0';
   inputAngleY.max = '360';
   inputAngleY.min = '-360';
@@ -223,7 +223,7 @@ function createInputAngleFigure(gl, i) {
   const inputAngleZ = document.createElement('input');
   inputAngleZ.id = 'z';
   inputAngleZ.name = '2';
-  inputAngleZ.type = 'number';
+  inputAngleZ.type = 'range';
   inputAngleZ.value = '0';
   inputAngleZ.max = '360';
   inputAngleZ.min = '-360';
