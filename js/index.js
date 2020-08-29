@@ -51,6 +51,7 @@ function rightClick(ev, gl) {
     g_points: [],
     g_angles: [0, 0, 0],
     g_color: { r: 255, g: 255, b: 255, t: 1 },
+    g_translate: [0, 0, 0],
   };
   models.push(model);
   const option = document.createElement('option');
@@ -121,12 +122,16 @@ function draw(gl) {
   for (var i = 0; i < models.length; i++) {
     var modelMatrix = new Matrix4();
     setViewProjMatrices(gl);
-    const { g_points, g_angles, g_color } = models[i];
-    console.log(g_color);
+    const { g_points, g_angles, g_color, g_translate } = models[i];
+
     // rotation
     modelMatrix.rotate(g_angles[0], 1, 0, 0);
     modelMatrix.rotate(g_angles[1], 0, 1, 0);
     modelMatrix.rotate(g_angles[2], 0, 0, 1);
+
+    // translate
+    modelMatrix.translate(g_translate[0], g_translate[1], g_translate[2]);
+
     var n = initVertexBuffers(
       gl,
       new Float32Array(g_points),
@@ -149,6 +154,7 @@ function click(ev, gl, canvas) {
         g_points: [],
         g_angles: [0, 0, 0],
         g_color: { r: 255, g: 255, b: 255, t: 1 },
+        g_translate: [0, 0, 0],
       };
       models.push(model);
       const option = document.createElement('option');
@@ -163,21 +169,33 @@ function click(ev, gl, canvas) {
     var rect = ev.target.getBoundingClientRect();
     x = (x - rect.left - canvas.width / 2) / (canvas.width / 2);
     y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
+    z = Number(zDeepInput.value);
 
     const { g_points } = models[index];
 
     g_points.push(x);
     g_points.push(y);
-    g_points.push(0.0);
+    g_points.push(z);
 
     draw(gl);
   }
 }
 
+const zDeepInput = document.querySelector('#zDeepInput');
+const zDeepSpan = document.querySelector('#zDeepSpan');
+zDeepInput.addEventListener('input', (e) => {
+  e.preventDefault();
+  console.log(e.target.value);
+  zDeepSpan.innerHTML = `Value: ${e.target.value}`;
+});
+
 const selectModels = document.querySelector('#selectModels');
 selectModels.addEventListener('change', (e) => {
   e.preventDefault();
   index = e.target.value;
+  const { g_color } = models[index];
+  const color = rgbToHex(g_color.r, g_color.g, g_color.b);
+  colorModelInput.value = color;
 });
 
 var axisValue = 0;
@@ -192,6 +210,10 @@ const translateSpan = document.querySelector('#translateSpan');
 translateInput.addEventListener('input', (e) => {
   e.preventDefault();
   translateSpan.innerHTML = `Value: ${e.target.value}`;
+  if (models[index]) {
+    models[index].g_translate[axisValue] = Number(e.target.value);
+    draw(gl);
+  }
 });
 
 const rotateInput = document.querySelector('#rotateInput');
@@ -229,4 +251,13 @@ function hexToRgb(hex) {
         b: parseInt(result[3], 16),
       }
     : null;
+}
+
+function componentToHex(c) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? '0' + hex : hex;
+}
+
+function rgbToHex(r, g, b) {
+  return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
