@@ -52,7 +52,7 @@ function rightClick(ev, gl) {
     g_angles: [0, 0, 0],
     g_color: { r: 255, g: 255, b: 255, t: 1 },
     g_translate: [0, 0, 0],
-    g_scale: [1, 1, 1],
+    g_scale: 1,
   };
   models.push(model);
   const option = document.createElement('option');
@@ -61,6 +61,16 @@ function rightClick(ev, gl) {
   option.innerHTML = model.name;
   option.selected = true;
   selectModels.appendChild(option);
+
+  rotateInput.value = model.g_angles[axisValue];
+  rotateNum.value = model.g_angles[axisValue];
+
+  scaleInput.value = model.g_scale;
+  scaleNum.value = model.g_scale;
+
+  translateInput.value = model.g_translate[axisValue];
+  translateNum.value = model.g_translate[axisValue];
+
   draw(gl);
 }
 
@@ -134,7 +144,7 @@ function draw(gl) {
     modelMatrix.translate(g_translate[0], g_translate[1], g_translate[2]);
 
     // scale
-    modelMatrix.scale(g_scale[0], g_scale[1], g_scale[1]);
+    modelMatrix.scale(g_scale, g_scale, g_scale);
 
     var n = initVertexBuffers(
       gl,
@@ -148,6 +158,7 @@ function draw(gl) {
     gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
   }
 }
+
 var models = [];
 var index = 0;
 function click(ev, gl, canvas) {
@@ -159,7 +170,7 @@ function click(ev, gl, canvas) {
         g_angles: [0, 0, 0],
         g_color: { r: 255, g: 255, b: 255, t: 1 },
         g_translate: [0, 0, 0],
-        g_scale: [1, 1, 1],
+        g_scale: 1,
       };
       models.push(model);
       const option = document.createElement('option');
@@ -190,8 +201,17 @@ const selectModels = document.querySelector('#selectModels');
 selectModels.addEventListener('change', (e) => {
   e.preventDefault();
   index = e.target.value;
-  const { g_color } = models[index];
+  const { g_color, g_angles, g_scale, g_translate } = models[index];
   const color = rgbToHex(g_color.r, g_color.g, g_color.b);
+  rotateInput.value = g_angles[axisValue];
+  rotateNum.value = g_angles[axisValue];
+
+  scaleInput.value = g_scale;
+  scaleNum.value = g_scale;
+
+  translateInput.value = g_translate[axisValue];
+  translateNum.value = g_translate[axisValue];
+
   colorModelInput.value = color;
 });
 
@@ -200,6 +220,15 @@ const divAxis = document.querySelector('#axis');
 divAxis.addEventListener('change', (e) => {
   e.preventDefault();
   axisValue = e.target.value;
+  const { g_angles, g_scale, g_translate } = models[index];
+  rotateInput.value = g_angles[axisValue];
+  rotateNum.value = g_angles[axisValue];
+
+  scaleInput.value = g_scale;
+  scaleNum.value = g_scale;
+
+  translateInput.value = g_translate[axisValue];
+  translateNum.value = g_translate[axisValue];
 });
 
 const zDeepInput = document.querySelector('#zDeepInput');
@@ -261,9 +290,7 @@ scaleInput.addEventListener('input', (e) => {
   e.preventDefault();
   scaleNum.value = e.target.value;
   if (models[index]) {
-    models[index].g_scale[0] = Number(e.target.value);
-    models[index].g_scale[1] = Number(e.target.value);
-    models[index].g_scale[2] = Number(e.target.value);
+    models[index].g_scale = Number(e.target.value);
     draw(gl);
   }
 });
@@ -271,9 +298,7 @@ scaleNum.addEventListener('input', (e) => {
   e.preventDefault();
   scaleInput.value = e.target.value;
   if (models[index]) {
-    models[index].g_scale[0] = Number(e.target.value);
-    models[index].g_scale[1] = Number(e.target.value);
-    models[index].g_scale[2] = Number(e.target.value);
+    models[index].g_scale = Number(e.target.value);
     draw(gl);
   }
 });
@@ -283,6 +308,36 @@ colorModelInput.addEventListener('change', (e) => {
   e.preventDefault();
   const color = hexToRgb(e.target.value);
   models[index].g_color = { ...models[index].g_color, ...color };
+  draw(gl);
+});
+
+const deleteModelButton = document.querySelector('#deleteModelButton');
+deleteModelButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  models = models.filter((model, i) => i !== Number(index));
+  while (selectModels.firstChild) {
+    selectModels.removeChild(selectModels.lastChild);
+  }
+  const lastIndex = models.length - 1;
+  models.map((model, i) => {
+    model.name = `Model ${i + 1}`;
+    const option = document.createElement('option');
+    option.id = `model${i}`;
+    option.value = i;
+    option.innerHTML = model.name;
+    lastIndex === i ? (option.selected = true) : (option.selected = false);
+    selectModels.appendChild(option);
+  });
+  index = lastIndex;
+  const { g_angles, g_scale, g_translate, g_color } = models[lastIndex];
+  const color = rgbToHex(g_color.r, g_color.g, g_color.b);
+  rotateInput.value = g_angles[axisValue];
+  rotateNum.value = g_angles[axisValue];
+  scaleInput.value = g_scale;
+  scaleNum.value = g_scale;
+  translateInput.value = g_translate[axisValue];
+  translateNum.value = g_translate[axisValue];
+  colorModelInput.value = color;
   draw(gl);
 });
 
