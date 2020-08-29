@@ -16,6 +16,43 @@
   </head>
 
   <body onload="main()">
+    <div id="controls">
+      <div id="axis">
+        <label>Axis</label><br />
+        <span>x</span><input name="axis" type="radio" value="0" /><br />
+        <span>y</span><input name="axis" type="radio" value="1" /><br />
+        <span>z</span><input name="axis" type="radio" value="2" />
+      </div>
+      <div>
+        <label>Controls</label><br />
+        <label>Translate</label><br /><input
+          id="translateInput"
+          type="range"
+          step=".01"
+          max="1"
+          min="-1"
+        /><span id="translateSpan">Value: 0</span>
+        <br />
+        <label>Rotate</label><br /><input
+          id="rotateInput"
+          type="range"
+          max="360"
+          min="-360"
+        /><span id="rotateSpan">Value: 0</span>
+        <br />
+        <label>Scale</label><br /><input
+          id="scaleInput"
+          type="range"
+          step=".01"
+          max="1"
+          min="-1"
+        /><span id="scaleSpan">Value: 0</span>
+      </div>
+      <div>
+        <select id="selectModels"></select>
+        <button id="deleteModelButton">Delete Model</button>
+      </div>
+    </div>
     <script src="lib/webgl-utils.js"></script>
     <script src="lib/webgl-debug.js"></script>
     <script src="lib/cuon-utils.js"></script>
