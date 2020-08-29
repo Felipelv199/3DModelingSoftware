@@ -16,16 +16,13 @@
   </head>
 
   <body onload="main()">
-    <div id="controls">
-      <div id="axis">
+    <div id="controls" class="wrapper">
+      <div id="axis" class="one">
         <label>Axis</label><br />
         <span>x</span><input name="axis" type="radio" value="0" checked /><br />
         <span>y</span><input name="axis" type="radio" value="1" /><br />
-        <span>z</span><input name="axis" type="radio" value="2" />
-      </div>
-      <div>
-        <label>Controls</label><br />
-        <label>z deep</label><br />
+        <span>z</span><input name="axis" type="radio" value="2" /><br />
+        <label>z axis value</label><br />
         <input id="zDeepInput" type="range" step=".1" max="1" min="-1" />
         <span id="zDeepSpan">Value: </span
         ><input
@@ -36,6 +33,9 @@
           max="1"
           min="-1"
         />
+      </div>
+      <div class="two">
+        <label>Controls</label><br />
         <br />
         <label>Translate</label>
         <br />
@@ -87,7 +87,7 @@
           min="0"
         />
       </div>
-      <div>
+      <div class="three">
         <select id="selectModels"></select>
         <input type="color" id="colorModelInput" />
         <button id="deleteModelButton">Delete Model</button>
