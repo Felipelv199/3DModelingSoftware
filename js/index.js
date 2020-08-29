@@ -50,7 +50,7 @@ function rightClick(ev, gl) {
     name: `Model ${index + 1}`,
     g_points: [],
     g_angles: [0, 0, 0],
-    g_color: { r: 0, g: 0, b: 0, t: 1 },
+    g_color: { r: 255, g: 255, b: 255, t: 1 },
   };
   models.push(model);
   const option = document.createElement('option');
@@ -122,7 +122,7 @@ function draw(gl) {
     var modelMatrix = new Matrix4();
     setViewProjMatrices(gl);
     const { g_points, g_angles, g_color } = models[i];
-
+    console.log(g_color);
     // rotation
     modelMatrix.rotate(g_angles[0], 1, 0, 0);
     modelMatrix.rotate(g_angles[1], 0, 1, 0);
@@ -131,10 +131,10 @@ function draw(gl) {
       gl,
       new Float32Array(g_points),
       modelMatrix,
-      g_color.r,
-      g_color.g,
-      g_color.g,
-      g_color.b
+      g_color.r / 255,
+      g_color.g / 255,
+      g_color.b / 255,
+      g_color.t
     );
     gl.drawArrays(gl.TRIANGLE_FAN, 0, n);
   }
@@ -148,7 +148,7 @@ function click(ev, gl, canvas) {
         name: `Model ${index + 1}`,
         g_points: [],
         g_angles: [0, 0, 0],
-        g_color: { r: 0, g: 0, b: 0, t: 1 },
+        g_color: { r: 255, g: 255, b: 255, t: 1 },
       };
       models.push(model);
       const option = document.createElement('option');
@@ -211,3 +211,22 @@ scaleInput.addEventListener('input', (e) => {
   e.preventDefault();
   scaleSpan.innerHTML = `Value: ${e.target.value}`;
 });
+
+const colorModelInput = document.querySelector('#colorModelInput');
+colorModelInput.addEventListener('change', (e) => {
+  e.preventDefault();
+  const color = hexToRgb(e.target.value);
+  models[index].g_color = { ...models[index].g_color, ...color };
+  draw(gl);
+});
+
+function hexToRgb(hex) {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16),
+      }
+    : null;
+}
