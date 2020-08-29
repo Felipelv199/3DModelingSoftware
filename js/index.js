@@ -52,6 +52,7 @@ function rightClick(ev, gl) {
     g_angles: [0, 0, 0],
     g_color: { r: 255, g: 255, b: 255, t: 1 },
     g_translate: [0, 0, 0],
+    g_scale: [1, 1, 1],
   };
   models.push(model);
   const option = document.createElement('option');
@@ -122,7 +123,7 @@ function draw(gl) {
   for (var i = 0; i < models.length; i++) {
     var modelMatrix = new Matrix4();
     setViewProjMatrices(gl);
-    const { g_points, g_angles, g_color, g_translate } = models[i];
+    const { g_points, g_angles, g_color, g_translate, g_scale } = models[i];
 
     // rotation
     modelMatrix.rotate(g_angles[0], 1, 0, 0);
@@ -131,6 +132,9 @@ function draw(gl) {
 
     // translate
     modelMatrix.translate(g_translate[0], g_translate[1], g_translate[2]);
+
+    // scale
+    modelMatrix.scale(g_scale[0], g_scale[1], g_scale[1]);
 
     var n = initVertexBuffers(
       gl,
@@ -155,6 +159,7 @@ function click(ev, gl, canvas) {
         g_angles: [0, 0, 0],
         g_color: { r: 255, g: 255, b: 255, t: 1 },
         g_translate: [0, 0, 0],
+        g_scale: [1, 1, 1],
       };
       models.push(model);
       const option = document.createElement('option');
@@ -169,7 +174,7 @@ function click(ev, gl, canvas) {
     var rect = ev.target.getBoundingClientRect();
     x = (x - rect.left - canvas.width / 2) / (canvas.width / 2);
     y = (canvas.height / 2 - (y - rect.top)) / (canvas.height / 2);
-    z = Number(zDeepInput.value);
+    z = Number(zDeepNum.value);
 
     const { g_points } = models[index];
 
@@ -180,14 +185,6 @@ function click(ev, gl, canvas) {
     draw(gl);
   }
 }
-
-const zDeepInput = document.querySelector('#zDeepInput');
-const zDeepSpan = document.querySelector('#zDeepSpan');
-zDeepInput.addEventListener('input', (e) => {
-  e.preventDefault();
-  console.log(e.target.value);
-  zDeepSpan.innerHTML = `Value: ${e.target.value}`;
-});
 
 const selectModels = document.querySelector('#selectModels');
 selectModels.addEventListener('change', (e) => {
@@ -205,11 +202,32 @@ divAxis.addEventListener('change', (e) => {
   axisValue = e.target.value;
 });
 
+const zDeepInput = document.querySelector('#zDeepInput');
+const zDeepSpan = document.querySelector('#zDeepSpan');
+const zDeepNum = document.querySelector('#zDeepNum');
+zDeepInput.addEventListener('input', (e) => {
+  e.preventDefault();
+  zDeepNum.value = e.target.value;
+});
+zDeepNum.addEventListener('input', (e) => {
+  e.preventDefault();
+  zDeepInput.value = e.target.value;
+});
+
 const translateInput = document.querySelector('#translateInput');
 const translateSpan = document.querySelector('#translateSpan');
+const translateNum = document.querySelector('#translateNum');
 translateInput.addEventListener('input', (e) => {
   e.preventDefault();
-  translateSpan.innerHTML = `Value: ${e.target.value}`;
+  translateNum.value = e.target.value;
+  if (models[index]) {
+    models[index].g_translate[axisValue] = Number(e.target.value);
+    draw(gl);
+  }
+});
+translateNum.addEventListener('input', (e) => {
+  e.preventDefault();
+  translateInput.value = e.target.value;
   if (models[index]) {
     models[index].g_translate[axisValue] = Number(e.target.value);
     draw(gl);
@@ -218,9 +236,18 @@ translateInput.addEventListener('input', (e) => {
 
 const rotateInput = document.querySelector('#rotateInput');
 const rotateSpan = document.querySelector('#rotateSpan');
+const rotateNum = document.querySelector('#rotateNum');
 rotateInput.addEventListener('input', (e) => {
   e.preventDefault();
-  rotateSpan.innerHTML = `Value: ${e.target.value}`;
+  rotateNum.value = e.target.value;
+  if (models[index]) {
+    models[index].g_angles[axisValue] = Number(e.target.value);
+    draw(gl);
+  }
+});
+rotateNum.addEventListener('input', (e) => {
+  e.preventDefault();
+  rotateInput.value = e.target.value;
   if (models[index]) {
     models[index].g_angles[axisValue] = Number(e.target.value);
     draw(gl);
@@ -229,9 +256,26 @@ rotateInput.addEventListener('input', (e) => {
 
 const scaleInput = document.querySelector('#scaleInput');
 const scaleSpan = document.querySelector('#scaleSpan');
+const scaleNum = document.querySelector('#scaleNum');
 scaleInput.addEventListener('input', (e) => {
   e.preventDefault();
-  scaleSpan.innerHTML = `Value: ${e.target.value}`;
+  scaleNum.value = e.target.value;
+  if (models[index]) {
+    models[index].g_scale[0] = Number(e.target.value);
+    models[index].g_scale[1] = Number(e.target.value);
+    models[index].g_scale[2] = Number(e.target.value);
+    draw(gl);
+  }
+});
+scaleNum.addEventListener('input', (e) => {
+  e.preventDefault();
+  scaleInput.value = e.target.value;
+  if (models[index]) {
+    models[index].g_scale[0] = Number(e.target.value);
+    models[index].g_scale[1] = Number(e.target.value);
+    models[index].g_scale[2] = Number(e.target.value);
+    draw(gl);
+  }
 });
 
 const colorModelInput = document.querySelector('#colorModelInput');

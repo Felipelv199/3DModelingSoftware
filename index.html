@@ -26,32 +26,66 @@
       <div>
         <label>Controls</label><br />
         <label>z deep</label><br />
-        <input id="zDeepInput" type="range" step=".01" max="1" min="-1" /><span
-          id="zDeepSpan"
-          >Value: 0</span
-        ><br />
-        <label>Translate</label><br /><input
-          id="translateInput"
-          type="range"
-          step=".01"
+        <input id="zDeepInput" type="range" step=".1" max="1" min="-1" />
+        <span id="zDeepSpan">Value: </span
+        ><input
+          id="zDeepNum"
+          type="number"
+          value="0"
+          step=".1"
           max="1"
           min="-1"
-        /><span id="translateSpan">Value: 0</span>
+        />
+        <br />
+        <label>Translate</label>
+        <br />
+        <input
+          id="translateInput"
+          type="range"
+          step=".1"
+          max="1"
+          min="-1"
+        /><span id="translateSpan">Value: </span
+        ><input
+          id="translateNum"
+          type="number"
+          value="0"
+          step=".1"
+          max="1"
+          min="-1"
+        />
         <br />
         <label>Rotate</label><br /><input
           id="rotateInput"
           type="range"
+          step="2"
           max="360"
           min="-360"
-        /><span id="rotateSpan">Value: 0</span>
+        /><span id="rotateSpan">Value: </span
+        ><input
+          id="rotateNum"
+          type="number"
+          value="0"
+          step="2"
+          max="360"
+          min="-360"
+        />
         <br />
         <label>Scale</label><br /><input
           id="scaleInput"
           type="range"
-          step=".01"
-          max="1"
-          min="-1"
-        /><span id="scaleSpan">Value: 0</span>
+          step=".1"
+          max="2"
+          min="0"
+        /><span id="scaleSpan">Value: </span
+        ><input
+          id="scaleNum"
+          type="number"
+          value="1"
+          step=".1"
+          max="2"
+          min="0"
+        />
       </div>
       <div>
         <select id="selectModels"></select>
