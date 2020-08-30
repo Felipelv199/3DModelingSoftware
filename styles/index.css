@@ -1,0 +1,26 @@
+body {
+  font-family: 'Roboto';
+  font-size: 20px;
+}
+.wrapper {
+  position: relative;
+  display: grid;
+  padding: 10px;
+  border: 1px solid black;
+  grid-template-columns: repeat(3, 1fr);
+}
+.one {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+}
+.two {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+}
+.three {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid black;
+}
