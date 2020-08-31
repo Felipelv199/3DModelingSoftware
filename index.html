@@ -12,14 +12,16 @@
 
   <body onload="main()">
     <div id="controls" class="wrapper">
-      <div id="axis" class="one">
-        <label>Axis</label>
-        <br />
-        <br />
-        <span>x</span><input name="axis" type="radio" value="0" checked /><br />
-        <span>y</span><input name="axis" type="radio" value="1" /><br />
-        <span>z</span><input name="axis" type="radio" value="2" /><br />
-        <label>z axis value</label><br />
+      <div id="axis&deep" class="one">
+        <div id="axis">
+          <label>Axis</label>
+          <br />
+          <br />
+          <span>x</span><input name="axis" type="radio" value="0" checked /><br />
+          <span>y</span><input name="axis" type="radio" value="1" /><br />
+          <span>z</span><input name="axis" type="radio" value="2" /><br />
+        </div>
+        <label>Set deep(z axis)</label><br />
         <input id="zDeepInput" type="range" step=".1" max="1" min="-1" />
         <span id="zDeepSpan"><input
           id="zDeepNum"

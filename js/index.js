@@ -61,16 +61,7 @@ function rightClick(ev, gl) {
   option.innerHTML = model.name;
   option.selected = true;
   selectModels.appendChild(option);
-
-  rotateInput.value = model.g_angles[axisValue];
-  rotateNum.value = model.g_angles[axisValue];
-
-  scaleInput.value = model.g_scale;
-  scaleNum.value = model.g_scale;
-
-  translateInput.value = model.g_translate[axisValue];
-  translateNum.value = model.g_translate[axisValue];
-
+  setInputsModelValues(model);
   draw(gl);
 }
 
@@ -179,6 +170,7 @@ function click(ev, gl, canvas) {
       option.innerHTML = model.name;
       option.selected = true;
       selectModels.appendChild(option);
+      setInputsModelValues(model);
     }
     var x = ev.clientX;
     var y = ev.clientY;
@@ -201,18 +193,7 @@ const selectModels = document.querySelector('#selectModels');
 selectModels.addEventListener('change', (e) => {
   e.preventDefault();
   index = e.target.value;
-  const { g_color, g_angles, g_scale, g_translate } = models[index];
-  const color = rgbToHex(g_color.r, g_color.g, g_color.b);
-  rotateInput.value = g_angles[axisValue];
-  rotateNum.value = g_angles[axisValue];
-
-  scaleInput.value = g_scale;
-  scaleNum.value = g_scale;
-
-  translateInput.value = g_translate[axisValue];
-  translateNum.value = g_translate[axisValue];
-
-  colorModelInput.value = color;
+  setInputsModelValues(models[index]);
 });
 
 var axisValue = 0;
@@ -220,15 +201,7 @@ const divAxis = document.querySelector('#axis');
 divAxis.addEventListener('change', (e) => {
   e.preventDefault();
   axisValue = e.target.value;
-  const { g_angles, g_scale, g_translate } = models[index];
-  rotateInput.value = g_angles[axisValue];
-  rotateNum.value = g_angles[axisValue];
-
-  scaleInput.value = g_scale;
-  scaleNum.value = g_scale;
-
-  translateInput.value = g_translate[axisValue];
-  translateNum.value = g_translate[axisValue];
+  setInputsModelValues(models[index]);
 });
 
 const zDeepInput = document.querySelector('#zDeepInput');
@@ -236,11 +209,11 @@ const zDeepSpan = document.querySelector('#zDeepSpan');
 const zDeepNum = document.querySelector('#zDeepNum');
 zDeepInput.addEventListener('input', (e) => {
   e.preventDefault();
-  zDeepNum.value = e.target.value;
+  zDeepNum.value = Number(e.target.value);
 });
 zDeepNum.addEventListener('input', (e) => {
   e.preventDefault();
-  zDeepInput.value = e.target.value;
+  zDeepInput.value = Number(e.target.value);
 });
 
 const translateInput = document.querySelector('#translateInput');
@@ -329,15 +302,7 @@ deleteModelButton.addEventListener('click', (e) => {
     selectModels.appendChild(option);
   });
   index = lastIndex;
-  const { g_angles, g_scale, g_translate, g_color } = models[lastIndex];
-  const color = rgbToHex(g_color.r, g_color.g, g_color.b);
-  rotateInput.value = g_angles[axisValue];
-  rotateNum.value = g_angles[axisValue];
-  scaleInput.value = g_scale;
-  scaleNum.value = g_scale;
-  translateInput.value = g_translate[axisValue];
-  translateNum.value = g_translate[axisValue];
-  colorModelInput.value = color;
+  setInputsModelValues(models[index]);
   draw(gl);
 });
 
@@ -359,4 +324,19 @@ function componentToHex(c) {
 
 function rgbToHex(r, g, b) {
   return '#' + componentToHex(r) + componentToHex(g) + componentToHex(b);
+}
+
+function setInputsModelValues(model) {
+  const { g_angles, g_scale, g_translate, g_color } = model;
+  rotateInput.value = g_angles[axisValue];
+  rotateNum.value = g_angles[axisValue];
+
+  scaleInput.value = g_scale;
+  scaleNum.value = g_scale;
+
+  translateInput.value = g_translate[axisValue];
+  translateNum.value = g_translate[axisValue];
+
+  const color = rgbToHex(g_color.r, g_color.g, g_color.b);
+  colorModelInput.value = color;
 }
