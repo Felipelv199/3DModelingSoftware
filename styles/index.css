@@ -16,6 +16,9 @@ input {
   border-color: #204051;
   text-decoration: none;
 }
+button {
+  cursor: pointer;
+}
 div {
   text-align: center;
 }
@@ -44,6 +47,11 @@ div {
   padding: 5px;
   border: 5px solid;
   border-color: #204051;
+
+  display: grid;
+  grid-gap: 5px;
+  align-content: center;
+  justify-content: center;
 }
 .modelsView {
   position: relative;
