@@ -246,16 +246,17 @@ deleteModelButton.addEventListener('click', (e) => {
   while (modelsContainerDiv.firstChild) {
     modelsContainerDiv.removeChild(modelsContainerDiv.lastChild);
   }
-  models.map((model, i) => {
-    model.name = `Model ${i + 1}`;
-    createModelSelector(i + 1, i);
-  });
   const lastIndex = models.length - 1;
   if (lastIndex !== -1) {
+    models.map((model, i) => {
+      model.name = `Model ${i + 1}`;
+      createModelSelector(i + 1, i);
+    });
     index = lastIndex;
     setInputsModelValues(models[lastIndex]);
   } else {
-    alert('There are any object to delete');
+    setDefaultInputValues();
+    alert('There are not elements to delete');
   }
   draw(gl);
 });
@@ -317,6 +318,22 @@ function setInputsModelValues(model) {
   colorModelInput.value = color;
 
   modelSelectedLabel.innerHTML = name;
+}
+
+function setDefaultInputValues() {
+  rotateInput.value = 0;
+  rotateNum.value = 0;
+
+  scaleInput.value = 1;
+  scaleNum.value = 1;
+
+  translateInput.value = 0;
+  translateNum.value = 0;
+
+  const color = rgbToHex(0, 0, 0);
+  colorModelInput.value = color;
+
+  modelSelectedLabel.innerHTML = 'No model has been added';
 }
 
 function createModelSelector(modelIndex, indexValue) {
