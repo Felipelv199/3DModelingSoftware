@@ -316,7 +316,8 @@ function setInputsModelValues(model) {
 
   const color = rgbToHex(g_color.r, g_color.g, g_color.b);
   colorModelInput.value = color;
-
+  zDeepInput.value = 0;
+  zDeepNum.value = 0;
   modelSelectedLabel.innerHTML = name;
 }
 
@@ -332,7 +333,8 @@ function setDefaultInputValues() {
 
   const color = rgbToHex(0, 0, 0);
   colorModelInput.value = color;
-
+  zDeepInput.value = 0;
+  zDeepNum.value = 0;
   modelSelectedLabel.innerHTML = 'No model has been added';
 }
 
