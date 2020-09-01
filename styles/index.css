@@ -1,6 +1,20 @@
-body {
-  font-family: 'Roboto';
+p {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 28px;
+  color: #204051;
+}
+span {
+  font-family: 'Quicksand', sans-serif;
   font-size: 20px;
+  color: #204051;
+}
+button,
+input {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 15px;
+  background-color: #84a9ac;
+  border-color: #204051;
+  text-decoration: none;
 }
 div {
   text-align: center;
@@ -9,21 +23,45 @@ div {
   position: relative;
   display: grid;
   padding: 10px;
-  border: 1px solid black;
+  border: 5px solid;
+  border-color: #204051;
   grid-template-columns: repeat(3, 1fr);
 }
 .one {
   margin: 5px;
   padding: 5px;
-  border: 1px solid black;
+  border: 5px solid;
+  border-color: #204051;
 }
 .two {
   margin: 5px;
   padding: 5px;
-  border: 1px solid black;
+  border: 5px solid;
+  border-color: #204051;
 }
 .three {
   margin: 5px;
   padding: 5px;
-  border: 1px solid black;
+  border: 5px solid;
+  border-color: #204051;
+}
+.modelsView {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.mvTwo {
+  display: grid;
+  grid-gap: 10px;
+  align-content: center;
+  justify-content: center;
+}
+.container {
+  display: grid;
+  grid-gap: 5px;
+  align-content: center;
+  justify-content: center;
+}
+body {
+  background-color: #e4e3e3;
 }

@@ -5,25 +5,31 @@
     <title>Example 01</title>
     <link rel="stylesheet" href="styles/index.css" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap"
       rel="stylesheet"
     />
   </head>
 
   <body onload="main()">
+    <div class="modelsView">
+      <div id="canvas" class="mvOne"></div>
+      <div id="models" class="mvTwo">
+        <button id="modelsButton" type="button">Create Model</button>
+        <div id="modelsContainer" class="container"></div>
+      </div>
+    </div>
     <div id="controls" class="wrapper">
       <div id="axis&deep" class="one">
         <div id="axis">
-          <label>Axis</label>
-          <br />
-          <br />
-          <span>x</span><input name="axis" type="radio" value="0" checked /><br />
+          <p>Axis</p>
+          <span>x</span
+          ><input name="axis" type="radio" value="0" checked /><br />
           <span>y</span><input name="axis" type="radio" value="1" /><br />
           <span>z</span><input name="axis" type="radio" value="2" /><br />
         </div>
-        <label>Set deep(z axis)</label><br />
+        <span>Set deep(z axis)</span><br />
         <input id="zDeepInput" type="range" step=".1" max="1" min="-1" />
-        <span id="zDeepSpan"><input
+        <input
           id="zDeepNum"
           type="number"
           value="0"
@@ -33,9 +39,7 @@
         />
       </div>
       <div class="two">
-        <label>Controls</label>
-        <br />
-        <br />
+        <p>Controls</p>
         <span>Translate</span>
         <br />
         <input
@@ -44,7 +48,7 @@
           step=".1"
           max="1"
           min="-1"
-        /><span id="translateSpan"><input
+        /><input
           id="translateNum"
           type="number"
           value="0"
@@ -53,13 +57,10 @@
           min="-1"
         />
         <br />
-        <label>Rotate</label><br /><input
-          id="rotateInput"
-          type="range"
-          step="2"
-          max="360"
-          min="-360"
-        /><span id="rotateSpan"><input
+        <span>Rotate</span>
+        <br />
+        <input id="rotateInput" type="range" step="2" max="360" min="-360" />
+        <input
           id="rotateNum"
           type="number"
           value="0"
@@ -68,13 +69,10 @@
           min="-360"
         />
         <br />
-        <label>Scale</label><br /><input
-          id="scaleInput"
-          type="range"
-          step=".1"
-          max="2"
-          min="0"
-        /><span id="scaleSpan"><input
+        <span>Scale</span>
+        <br />
+        <input id="scaleInput" type="range" step=".1" max="2" min="0" />
+        <input
           id="scaleNum"
           type="number"
           value="1"
@@ -84,8 +82,10 @@
         />
       </div>
       <div class="three">
-        <select id="selectModels"></select><br>
-        <input type="color" id="colorModelInput" /><br>
+        <p>Current Model</p>
+        <span id="modelSelectedLabel">No model has been added</span>
+        <br />
+        <input type="color" id="colorModelInput" /><br />
         <button id="deleteModelButton">Delete Model</button>
       </div>
     </div>

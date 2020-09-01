@@ -17,7 +17,7 @@ var FSHADER_SOURCE =
 const canvas = document.createElement('canvas');
 canvas.width = 400;
 canvas.height = 400;
-document.querySelector('body').prepend(canvas);
+document.querySelector('#canvas').prepend(canvas);
 const gl = canvas.getContext('webgl');
 
 function main() {
@@ -34,34 +34,9 @@ function main() {
   canvas.onmousedown = function (ev) {
     click(ev, gl, canvas);
   };
-  canvas.oncontextmenu = function (ev) {
-    rightClick(ev, gl);
-    return false;
-  };
 
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clear(gl.COLOR_BUFFER_BIT);
-  draw(gl);
-}
-
-function rightClick(ev, gl) {
-  index = models.length;
-  const model = {
-    name: `Model ${index + 1}`,
-    g_points: [],
-    g_angles: [0, 0, 0],
-    g_color: { r: 255, g: 255, b: 255, t: 1 },
-    g_translate: [0, 0, 0],
-    g_scale: 1,
-  };
-  models.push(model);
-  const option = document.createElement('option');
-  option.id = `model${index}`;
-  option.value = index;
-  option.innerHTML = model.name;
-  option.selected = true;
-  selectModels.appendChild(option);
-  setInputsModelValues(model);
   draw(gl);
 }
 
@@ -155,22 +130,8 @@ var index = 0;
 function click(ev, gl, canvas) {
   if (event.buttons == 1) {
     if (models.length === 0) {
-      const model = {
-        name: `Model ${index + 1}`,
-        g_points: [],
-        g_angles: [0, 0, 0],
-        g_color: { r: 255, g: 255, b: 255, t: 1 },
-        g_translate: [0, 0, 0],
-        g_scale: 1,
-      };
-      models.push(model);
-      const option = document.createElement('option');
-      option.id = `model${index}`;
-      option.value = index;
-      option.innerHTML = model.name;
-      option.selected = true;
-      selectModels.appendChild(option);
-      setInputsModelValues(model);
+      alert('Create a model first');
+      return;
     }
     var x = ev.clientX;
     var y = ev.clientY;
@@ -185,16 +146,9 @@ function click(ev, gl, canvas) {
     g_points.push(y);
     g_points.push(z);
 
-    draw(gl);
+    draw(gl, true);
   }
 }
-
-const selectModels = document.querySelector('#selectModels');
-selectModels.addEventListener('change', (e) => {
-  e.preventDefault();
-  index = e.target.value;
-  setInputsModelValues(models[index]);
-});
 
 var axisValue = 0;
 const divAxis = document.querySelector('#axis');
@@ -285,25 +239,47 @@ colorModelInput.addEventListener('change', (e) => {
 });
 
 const deleteModelButton = document.querySelector('#deleteModelButton');
+const modelsContainerDiv = document.querySelector('#modelsContainer');
 deleteModelButton.addEventListener('click', (e) => {
   e.preventDefault();
   models = models.filter((model, i) => i !== Number(index));
-  while (selectModels.firstChild) {
-    selectModels.removeChild(selectModels.lastChild);
+  while (modelsContainerDiv.firstChild) {
+    modelsContainerDiv.removeChild(modelsContainerDiv.lastChild);
   }
-  const lastIndex = models.length - 1;
   models.map((model, i) => {
     model.name = `Model ${i + 1}`;
-    const option = document.createElement('option');
-    option.id = `model${i}`;
-    option.value = i;
-    option.innerHTML = model.name;
-    lastIndex === i ? (option.selected = true) : (option.selected = false);
-    selectModels.appendChild(option);
+    createModelSelector(i + 1, i);
   });
-  index = lastIndex;
-  setInputsModelValues(models[index]);
+  const lastIndex = models.length - 1;
+  if (lastIndex !== -1) {
+    index = lastIndex;
+    setInputsModelValues(models[lastIndex]);
+  } else {
+    alert('There are any object to delete');
+  }
   draw(gl);
+});
+
+const createModelButton = document.querySelector('#modelsButton');
+createModelButton.addEventListener('click', (e) => {
+  e.preventDefault();
+  const modelIndex = models.length + 1;
+  models.push(createNewModel(modelIndex));
+  index = modelIndex - 1;
+  createModelSelector(modelIndex, index);
+  setInputsModelValues(models[index]);
+});
+
+const modelsDiv = document.querySelector('#models');
+const modelSelectedLabel = document.querySelector('#modelSelectedLabel');
+modelsDiv.addEventListener('click', (e) => {
+  e.preventDefault();
+  if (e.target.value && e.target.value !== 'Create Model') {
+    const modelsIndex = e.target.value;
+    const modelSelected = models[modelsIndex];
+    setInputsModelValues(modelSelected);
+    index = modelsIndex;
+  }
 });
 
 function hexToRgb(hex) {
@@ -327,7 +303,7 @@ function rgbToHex(r, g, b) {
 }
 
 function setInputsModelValues(model) {
-  const { g_angles, g_scale, g_translate, g_color } = model;
+  const { g_angles, g_scale, g_translate, g_color, name } = model;
   rotateInput.value = g_angles[axisValue];
   rotateNum.value = g_angles[axisValue];
 
@@ -339,4 +315,26 @@ function setInputsModelValues(model) {
 
   const color = rgbToHex(g_color.r, g_color.g, g_color.b);
   colorModelInput.value = color;
+
+  modelSelectedLabel.innerHTML = name;
+}
+
+function createModelSelector(modelIndex, indexValue) {
+  const button = document.createElement('button');
+  button.innerHTML = `Model ${modelIndex}`;
+  button.value = indexValue;
+  const modelsDiv = document.querySelector('#modelsContainer');
+  modelsDiv.appendChild(button);
+}
+
+function createNewModel(i) {
+  const model = {
+    name: `Model ${i}`,
+    g_points: [],
+    g_angles: [0, 0, 0],
+    g_color: { r: 255, g: 255, b: 255, t: 1 },
+    g_translate: [0, 0, 0],
+    g_scale: 1,
+  };
+  return model;
 }
